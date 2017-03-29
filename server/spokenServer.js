@@ -20,11 +20,15 @@ app.use(async function (ctx, next) {
   var method = ctx.request.method
   var body
   if (method === 'GET') {
-    await send(ctx, ctx.path, { root: path.join(__dirname, '../web') })
+    if (ctx.path === '/') {
+      ctx.redirect('/index.html')
+    } else {
+      await send(ctx, ctx.path, { root: path.join(__dirname, '../web') })
+    }
   } else if (method === 'POST') {
     if (ctx.path === '/asl') {
       body = ctx.request.body
-      console.log('==========asl:source================\n' + body.source)
+//      console.log('==========asl:source================\n' + body.source)
       ctx.body = JSON.stringify(asl(body.source), null, 2)
     }
   }
